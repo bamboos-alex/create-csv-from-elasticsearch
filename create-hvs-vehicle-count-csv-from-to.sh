@@ -17,7 +17,7 @@ DATE_CMD=gdate
 echo "create hvs vehicle count daily csv files from $FROM to $TO ..."
 TO_PLUS_ONE_DAY=$($DATE_CMD --date "$TO + 1 day" +"%Y%m%d")
 
-
+echo "timstamp, detector_id, vehicle_count" > hvs-vehicle-count-$FROM.csv
 while [[ "$FROM" != "$TO_PLUS_ONE_DAY" ]]; do
   echo "$FROM"
 

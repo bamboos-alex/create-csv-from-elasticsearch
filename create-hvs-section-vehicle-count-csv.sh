@@ -10,6 +10,8 @@ if [[ $# -ne 2 ]]; then
   exit -1
 fi
 
+DATE_CMD=gdate
+
 IN_DATE=$1
 IN_HOUR=$2
 
@@ -30,5 +32,7 @@ TARGET_FILE=$IN_DATE/$PREFIX$TIMESTAMP*.json
 #echo "$TARGET_FILE"
 #echo "$DATE"
 
-# TODO 1000 대가 넘어갈 경우 콤마 유실?
-cat $TARGET_FILE | grep -E "sectionId" | sort | uniq -c | awk -F "\"" '{print $4 $1}' | awk -F " " -v date="$DATE, " '{ print (date $1", " $2)  }'
+SHIFT_DATE=$($DATE_CMD --date "$DATE 1 hour ago" +"%Y-%m-%d %H:%M")
+#echo "$SHIFT_DATE"
+
+cat $TARGET_FILE | grep -E "sectionId" | sort | uniq -c | awk -F "\"" '{print $4 $1}' | awk -F " " -v date="$SHIFT_DATE, " '{ print (date $1", " $2)  }'

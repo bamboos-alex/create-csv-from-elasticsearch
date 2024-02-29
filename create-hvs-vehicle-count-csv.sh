@@ -10,6 +10,8 @@ if [[ $# -ne 2 ]]; then
   exit -1
 fi
 
+DATE_CMD=gdate
+
 IN_DATE=$1
 IN_HOUR=$2
 
@@ -32,7 +34,10 @@ TARGET_FILE=$IN_DATE/$PREFIX$TIMESTAMP*.txt
 #echo "$TARGET_FILE"
 #echo "$DATE"
 
-cat $TARGET_FILE | grep -E "04-|07-|20-" | awk -F " " -v date="$DATE, " '{ print (date "HVS-"$2"," , $1 )  }'
+SHIFT_DATE=$($DATE_CMD --date "$DATE 1 hour ago" +"%Y-%m-%d %H:%M")
+#echo "$SHIFT_DATE"
+
+cat $TARGET_FILE | grep -E "04-|07-|20-" | awk -F " " -v date="$SHIFT_DATE, " '{ print (date "HVS-"$2"," , $1 )  }'
 
 
 

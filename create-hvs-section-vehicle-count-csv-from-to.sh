@@ -13,14 +13,17 @@ FROM=$1
 TO=$2
 
 DATE_CMD=gdate
+TARGET_DIR=./hvs-section
+
+mkdir -p $TARGET_DIR
 
 echo "create hvs section vehicle count daily csv files from $FROM to $TO ..."
 TO_PLUS_ONE_DAY=$($DATE_CMD --date "$TO + 1 day" +"%Y%m%d")
 
 while [[ "$FROM" != "$TO_PLUS_ONE_DAY" ]]; do
   echo "$FROM"
-  echo "timstamp, section_id, vehicle_count" > hvs-section-vehicle-count-$FROM.csv
-  ./create-hvs-section-vehicle-count-csv-daily.sh $FROM >> hvs-section-vehicle-count-$FROM.csv
+  echo "timstamp, section_id, vehicle_count" > $TARGET_DIR/hvs-section-vehicle-count-$FROM.csv
+  ./create-hvs-section-vehicle-count-csv-daily.sh $FROM >> $TARGET_DIR/hvs-section-vehicle-count-$FROM.csv
 
   FROM=$($DATE_CMD --date "$FROM + 1 day" +"%Y%m%d")
 done
